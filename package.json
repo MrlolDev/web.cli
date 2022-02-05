@@ -1,10 +1,12 @@
 {
   "name": "@mrlol/web.cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A command line interface to init your web proyect",
   "main": "src/index.js",
   "type": "module",
-  "bin": "src/index.js",
+  "bin": {
+    "web": "src/index.js"
+  },
   "scripts": {
     "start": "node ."
   },
@@ -31,6 +33,7 @@
   "dependencies": {
     "chalk": "^5.0.0",
     "chalk-animation": "^1.6.0",
+    "exec-sh": "^0.4.0",
     "figlet": "^1.5.2",
     "gradient-string": "^2.0.0",
     "inquirer": "^8.2.0",
