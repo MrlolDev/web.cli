@@ -21,6 +21,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 var webType = null;
 var frontend = null;
 var backend = null;
+var configs = [];
 
 async function load(ms, message) {
   const spinner = createSpinner(message);
@@ -46,7 +47,7 @@ async function webTypeSelector() {
       type: "list",
       name: "webType",
       message: "What type of web do you want to create?",
-      choices: ["fullstack", "frotend", "backend", "loadConfig"],
+      choices: ["fullstack", "frotend", "backend", "load-config"],
     },
   ]);
   webType = webTypePrompt.webType;
@@ -58,7 +59,7 @@ async function frontendSelector() {
       type: "list",
       name: "frontend",
       message: "What frontend framework do you want to use?",
-      choices: ["react", "vue", "angular", "next", "svelte", "lit", "stencil", "solid", "alpine", "mithril"],
+      choices: ["react", "vue", "angular", "next", "svelte", "lit", "stencil", "solid", "alpine", "mithril", ],
     },
   ]);
   frontend = frontendPrompt.frontend;
@@ -116,23 +117,44 @@ async function saveConfig() {
   });
 }
 async function getConfig() {
-  var configName = await inquirer.prompt([
+    await getConfigs();
+    if(configs.length <= 0) {
+        console.log(chalk.red('No configurations found. Please create one.'));
+        process.exit();
+    }
+    var configName = await inquirer.prompt([
     {
-      type: "input",
-      name: "configName",
-      message: "What is the name of your configuration?",
+        type: 'list',
+        name: 'config',
+        message: 'Select a config',
+        choices: configs.map(config => config.name),
     },
   ]);
-  var configFile = `./src/configs/${configName.configName}.json`;
+  var configFile = `./src/configs/${configName.config}.json`;
   if (!fs.existsSync(configFile))
     console.log(
-      chalk.red(`Configuration ${configName.configName} does not exist.`)
+      chalk.red(`Configuration ${configName.config} does not exist.`)
     );
   var configString = fs.readFileSync(configFile, "utf8");
   var config = JSON.parse(configString);
   frontend = config.frontend;
   backend = config.backend;
-  console.log(chalk.green(`Configuration ${configName.configName} loaded!`));
+  console.log(chalk.green(`Configuration ${configName.config} loaded!`));
+}
+async function getConfigs() {
+    var configFiles = fs.readdirSync('./src/configs/');
+    configFiles.forEach(function(file) {
+        if (file.endsWith('.json')) {
+            var fileContent = fs.readFileSync('./src/configs/' + file, 'utf8');
+            var config = {
+                name: file.replace('.json', ''),
+                webType: JSON.parse(fileContent).webType,
+                frontend: JSON.parse(fileContent).frontend,
+                backend: JSON.parse(fileContent).backend,
+            }
+            configs.push(config);
+        }
+    });
 }
 async function initProject() {
   if (frontend) {
@@ -267,7 +289,7 @@ await welcome();
 await webTypeSelector();
 await load(500, "Loading...");
 console.clear();
-if (webType == "loadConfig") {
+if (webType == "load-config") {
   await getConfig();
 }
 if (

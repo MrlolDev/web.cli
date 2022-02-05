@@ -1,7 +1,7 @@
 {
   "name": "@mrlol/web.cli",
-  "version": "0.0.3",
-  "description": "A command line interface to init your web proyect",
+  "version": "0.0.5",
+  "description": "A command line interface to init your web proyect with different frameworks.",
   "main": "src/index.js",
   "type": "module",
   "bin": {
@@ -9,7 +9,8 @@
     "web-configs": "src/configs.js"
   },
   "scripts": {
-    "start": "node ."
+    "web": "node src/index.js",
+    "web-configs": "node src/configs.js"
   },
   "repository": {
     "type": "git",
@@ -42,11 +43,7 @@
     "chalk-animation": "^1.6.0",
     "exec-sh": "^0.4.0",
     "figlet": "^1.5.2",
-    "gradient-string": "^2.0.0",
     "inquirer": "^8.2.0",
     "nanospinner": "^1.0.0"
-  },
-  "devDependencies": {
-    "eslint-config-standard": "^16.0.3"
   }
 }
