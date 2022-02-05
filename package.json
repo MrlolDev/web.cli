@@ -25,8 +25,6 @@
     "vue",
     "angular",
     "nextjs",
-    "svelte",
-    "lit",
     "express",
     "koa",
     "nest",
@@ -42,7 +40,6 @@
     "chalk": "^5.0.0",
     "chalk-animation": "^1.6.0",
     "exec-sh": "^0.4.0",
-    "figlet": "^1.5.2",
     "inquirer": "^8.2.0",
     "nanospinner": "^1.0.0"
   }

@@ -3,8 +3,13 @@
 A command line interface to init your web proyect with different frameworks.
 
 # Installation
+### With NPM
 ```
 $ npm i @mrlol/web.cli -g
+```
+### With Yarn
+```
+$ yarn add @mrlol/web.cli -g
 ```
 # Usage
 ## Init your project
@@ -25,13 +30,7 @@ If you want to suggest a new framework, please open an issue on [Github](https:/
 1. [React](https://reactjs.org/)
 2. [Vue](https://vuejs.org/)
 3. [Angular](https://angular.io/)
-4. [Svelte](https://svelte.dev/)
 5. [Next](https://nextjs.org/)
-6. [Lit](https://lit.dev/)
-7. [stencil](https://stenciljs.com/)
-8. [Solid](https://solid.dev/)
-9. [Alpine](https://alpinejs.dev/)
-10. [Mithril](https://mithril.js.org/)
 
 ## Backend frameworks
 1. [Express](https://expressjs.com/)

@@ -12,7 +12,6 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
 import chalkAnimation from "chalk-animation";
-import figlet from "figlet";
 import fs from "fs";
 import exec from "exec-sh";
 import { createSpinner } from "nanospinner";
@@ -30,13 +29,7 @@ async function load(ms, message) {
   spinner.stop();
 }
 async function welcome() {
-  var welcomeTitle = chalkAnimation.rainbow(
-    figlet.textSync("Welcome to web.cli", {
-      font: "Big Money-ne",
-      horizontalLayout: "default",
-      verticalLayout: "default",
-    })
-  );
+  var welcomeTitle = chalkAnimation.rainbow("Welcome to web.cli");
   welcomeTitle.start();
   await sleep(500);
   welcomeTitle.stop();
@@ -59,7 +52,12 @@ async function frontendSelector() {
       type: "list",
       name: "frontend",
       message: "What frontend framework do you want to use?",
-      choices: ["react", "vue", "angular", "next", "svelte", "lit", "stencil", "solid", "alpine", "mithril", ],
+      choices: [
+        "react",
+        "vue",
+        "angular",
+        "next",
+      ],
     },
   ]);
   frontend = frontendPrompt.frontend;
@@ -117,17 +115,17 @@ async function saveConfig() {
   });
 }
 async function getConfig() {
-    await getConfigs();
-    if(configs.length <= 0) {
-        console.log(chalk.red('No configurations found. Please create one.'));
-        process.exit();
-    }
-    var configName = await inquirer.prompt([
+  await getConfigs();
+  if (configs.length <= 0) {
+    console.log(chalk.red("No configurations found. Please create one."));
+    process.exit();
+  }
+  var configName = await inquirer.prompt([
     {
-        type: 'list',
-        name: 'config',
-        message: 'Select a config',
-        choices: configs.map(config => config.name),
+      type: "list",
+      name: "config",
+      message: "Select a config",
+      choices: configs.map((config) => config.name),
     },
   ]);
   var configFile = `./src/configs/${configName.config}.json`;
@@ -142,86 +140,21 @@ async function getConfig() {
   console.log(chalk.green(`Configuration ${configName.config} loaded!`));
 }
 async function getConfigs() {
-    var configFiles = fs.readdirSync('./src/configs/');
-    configFiles.forEach(function(file) {
-        if (file.endsWith('.json')) {
-            var fileContent = fs.readFileSync('./src/configs/' + file, 'utf8');
-            var config = {
-                name: file.replace('.json', ''),
-                webType: JSON.parse(fileContent).webType,
-                frontend: JSON.parse(fileContent).frontend,
-                backend: JSON.parse(fileContent).backend,
-            }
-            configs.push(config);
-        }
-    });
+  var configFiles = fs.readdirSync("./src/configs/");
+  configFiles.forEach(function (file) {
+    if (file.endsWith(".json")) {
+      var fileContent = fs.readFileSync("./src/configs/" + file, "utf8");
+      var config = {
+        name: file.replace(".json", ""),
+        webType: JSON.parse(fileContent).webType,
+        frontend: JSON.parse(fileContent).frontend,
+        backend: JSON.parse(fileContent).backend,
+      };
+      configs.push(config);
+    }
+  });
 }
 async function initProject() {
-  if (frontend) {
-    if (frontend == "react") {
-      await load(100, "Starting react project with create-react-app...");
-      await exec("npm install -g create-react-app");
-      await load(
-        15000,
-        "Waiting for create-react-app to finish installation..."
-      );
-      await exec(`create-react-app client`);
-    }
-    if (frontend == "vue") {
-      await load(100, "Starting vue project with vue-cli...");
-      await exec("npm install -g vue-cli");
-      await load(15000, "Waiting for vue-cli to finish installation...");
-      await exec(`vue init webpack client`);
-    }
-    if (frontend == "angular") {
-      await load(100, "Starting angular project with ng new...");
-      await exec("npm install -g @angular/cli");
-      await load(15000, "Waiting for ng new to finish installation...");
-      await exec(`ng new client`);
-    }
-    if (frontend == "next") {
-      await load(100, "Starting next project with next create...");
-      await exec("npm install -g next");
-      await load(15000, "Waiting for next create to finish installation...");
-      await exec(`next create client`);
-    }
-    if (frontend == "svelte") {
-      await load(100, "Starting svelte project with svelte init...");
-      await exec("npm install -g svelte");
-      await load(15000, "Waiting for svelte init to finish installation...");
-      await exec(`svelte init client`);
-    }
-    if (frontend == "lit") {
-      await load(100, "Starting lit project with lit init...");
-      await exec("npm install -g lit-cli");
-      await load(15000, "Waiting for lit init to finish installation...");
-      await exec(`lit init client`);
-    }
-    if (frontend == "stencil") {
-        await load(100, "Starting stencil project with stencil init...");
-        await exec("npm install -g stencil");
-        await load(15000, "Waiting for stencil init to finish installation...");
-        await exec(`stencil init client`);
-    }
-    if (frontend == "solid") {
-        await load(100, "Starting solid project with solid init...");
-        await exec("npm install -g solid-cli");
-        await load(15000, "Waiting for solid init to finish installation...");
-        await exec(`solid init client`);
-    }
-    if (frontend == "alpine") {
-        await load(100, "Starting alpine project with alpine init...");
-        await exec("npm install -g alpine");
-        await load(15000, "Waiting for alpine init to finish installation...");
-        await exec(`alpine init client`);
-    }
-    if (frontend == "mithril") {
-        await load(100, "Starting mithril project with mithril init...");
-        await exec("npm install -g mithril");
-        await load(15000, "Waiting for mithril init to finish installation...");
-        await exec(`mithril init client`);
-    }
-}
   if (backend) {
     if (backend == "express") {
       await load(100, "Creating server folder...");
@@ -266,20 +199,50 @@ async function initProject() {
     if (backend == "nest") {
       await load(100, "Starting nest project with nest cli");
       await exec("npm i -g @nestjs/cli");
-      await load(15000, "Waiting for nest cli to finish installation...");
+    await sleep(20000);
       await exec("nest new server");
     }
     if (backend == "fastify") {
       await load(100, "Starting fastify project with fastify cli");
-      await exec("npm i -g fastify");
-      await load(15000, "Waiting for fastify cli to finish installation...");
-      await exec("fastify new server");
+      await exec("npm install fastify-cli --global");
+        await sleep(15000);
+      await exec("fastify generate server");
     }
     if (backend == "koa") {
       await load(100, "Starting koa project with koa cli");
       await exec("npm i -g koa");
-      await load(15000, "Waiting for koa cli to finish installation...");
+      await sleep(15000);
       await exec("koa new server");
+    }
+  }
+  if (frontend) {
+    if (frontend == "react") {
+      await load(100, "Starting react project with create-react-app...");
+      await exec("npm install -g create-react-app");
+        await sleep(10000);
+      await exec(`create-react-app client`);
+    }
+    if (frontend == "vue") {
+      await load(100, "Starting vue project with vue-cli...");
+      await exec("npm install -g vue-cli");
+      await sleep(10000);
+      await exec(`vue init webpack client`);
+    }
+    if (frontend == "angular") {
+      await load(100, "Starting angular project with ng new...");
+      await exec("npm install -g @angular/cli");
+      await sleep(15000);
+      await exec(`ng new client`);
+    }
+    if (frontend == "next") {
+        await load(100, "Creating next proyect...");
+      await exec(`npx create-next-app@latest`);
+    }
+    if (frontend == "svelte") {
+      await load(100, "Starting svelte project with svelte init...");
+      await exec("npm install -g svelte");
+      await sleep(15000);
+      await exec(`svelte init client`);
     }
   }
 }
