@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "type": "module",
   "bin": {
-    "web": "src/index.js"
+    "web": "src/index.js",
+    "web-configs": "src/configs.js"
   },
   "scripts": {
     "start": "node ."
@@ -18,11 +19,17 @@
     "web.cli",
     "web",
     "cli",
+    "web cli",
     "react",
-    "nest",
+    "vue",
+    "angular",
+    "nextjs",
+    "svelte",
+    "lit",
     "express",
-    "next",
-    "angular"
+    "koa",
+    "nest",
+    "fastify"
   ],
   "author": "MrlolDev",
   "license": "MIT",
