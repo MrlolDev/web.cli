@@ -59,7 +59,7 @@ async function frontendSelector() {
         type: "list",
         name: "frontend",
         message: "What frontend framework do you want to use?",
-        choices: ["react", "vue", "angular", "next", "svelte"],
+        choices: ["react", "vue", "angular", "next", "svelte", "lit"],
         },
     ]);
     frontend = frontendPrompt.frontend;
@@ -160,6 +160,12 @@ async function initProject() {
             await exec('npm install -g svelte');
             await load(15000, 'Waiting for svelte init to finish installation...');
             await exec(`svelte init client`);
+        }
+        if(frontend == "lit") {
+            await load(100, "Starting lit project with lit init...");
+            await exec('npm install -g lit-cli');
+            await load(15000, 'Waiting for lit init to finish installation...');
+            await exec(`lit init client`);
         }
     }
     if(backend) {
