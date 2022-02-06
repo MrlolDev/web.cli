@@ -38,3 +38,7 @@ If you want to suggest a new framework, please open an issue on [Github](https:/
 3. [Fastify](https://fastify.io/)
 4. [Nest](https://nestjs.com/)
 
+## App frameworks
+1. [React Native](https://reactnative.dev/)
+2. [Ionic](https://ionicframework.com/)
+3. [Electron](https://electronjs.org/)
