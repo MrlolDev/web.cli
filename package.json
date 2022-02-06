@@ -1,6 +1,6 @@
 {
   "name": "@mrlol/web.cli",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A command line interface to init your web proyect with different frameworks.",
   "main": "src/index.js",
   "type": "module",
