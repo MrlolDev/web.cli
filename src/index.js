@@ -17,10 +17,8 @@ import exec from "exec-sh";
 import { createSpinner } from "nanospinner";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-var webType = null;
-var frontend = null;
-var backend = null;
 var configs = [];
+var config = {};
 
 async function load(ms, message) {
   const spinner = createSpinner(message);
@@ -40,10 +38,10 @@ async function webTypeSelector() {
       type: "list",
       name: "webType",
       message: "What type of web do you want to create?",
-      choices: ["fullstack", "frotend", "backend", "load-config"],
+      choices: ["fullstack", "frotend", "backend", "app", "load-config"],
     },
   ]);
-  webType = webTypePrompt.webType;
+  config.webType = webTypePrompt.webType;
   return webTypePrompt.webType;
 }
 async function frontendSelector() {
@@ -52,15 +50,10 @@ async function frontendSelector() {
       type: "list",
       name: "frontend",
       message: "What frontend framework do you want to use?",
-      choices: [
-        "react",
-        "vue",
-        "angular",
-        "next",
-      ],
+      choices: ["react", "vue", "angular", "next", "svelte"],
     },
   ]);
-  frontend = frontendPrompt.frontend;
+  config.frontend = frontendPrompt.frontend;
   return frontendPrompt.frontend;
 }
 async function backendSelector() {
@@ -72,8 +65,20 @@ async function backendSelector() {
       choices: ["express", "nest", "fastify", "koa"],
     },
   ]);
-  backend = backendPrompt.backend;
+  config.backend = backendPrompt.backend;
   return backendPrompt.backend;
+}
+async function appSelector() {
+  const appPrompt = await inquirer.prompt([
+    {
+      type: "list",
+      name: "app",
+      message: "What framework do you want to use to create your application?",
+      choices: ["react native", "ionic", "electron"],
+    },
+  ]);
+  config.app = appPrompt.app;
+  return appPrompt.app;
 }
 async function saveConfigPrompt() {
   var saveConfigPrompt = await inquirer.prompt([
@@ -81,6 +86,7 @@ async function saveConfigPrompt() {
       type: "confirm",
       name: "saveConfig",
       message: "Do you want to save this configuration?",
+      default: false,
     },
   ]);
   if (saveConfigPrompt.saveConfig) {
@@ -96,11 +102,7 @@ async function saveConfig() {
       message: "What do you want to name your configuration?",
     },
   ]);
-  var config = {
-    webType: webType,
-    frontend: frontend,
-    backend: backend,
-  };
+  config.name = configName.configName;
   var configString = JSON.stringify(config);
   var configFile = `./src/configs/${configName.configName}.json`;
   if (fs.existsSync(configFile))
@@ -134,9 +136,7 @@ async function getConfig() {
       chalk.red(`Configuration ${configName.config} does not exist.`)
     );
   var configString = fs.readFileSync(configFile, "utf8");
-  var config = JSON.parse(configString);
-  frontend = config.frontend;
-  backend = config.backend;
+  config = JSON.parse(configString);
   console.log(chalk.green(`Configuration ${configName.config} loaded!`));
 }
 async function getConfigs() {
@@ -144,19 +144,13 @@ async function getConfigs() {
   configFiles.forEach(function (file) {
     if (file.endsWith(".json")) {
       var fileContent = fs.readFileSync("./src/configs/" + file, "utf8");
-      var config = {
-        name: file.replace(".json", ""),
-        webType: JSON.parse(fileContent).webType,
-        frontend: JSON.parse(fileContent).frontend,
-        backend: JSON.parse(fileContent).backend,
-      };
-      configs.push(config);
+      configs.push(JSON.parse(fileContent));
     }
   });
 }
 async function initProject() {
-  if (backend) {
-    if (backend == "express") {
+  if (config.backend) {
+    if (config.backend == "express") {
       await load(100, "Creating server folder...");
       fs.mkdirSync("./server");
       await load(100, "Creating server src folder...");
@@ -196,53 +190,73 @@ async function initProject() {
       await exec(`cd server && npm i express dotenv morgan`);
       console.log(chalk.green("Server project created!"));
     }
-    if (backend == "nest") {
+    if (config.backend == "nest") {
       await load(100, "Starting nest project with nest cli");
       await exec("npm i -g @nestjs/cli");
-    await sleep(20000);
+      await sleep(20000);
       await exec("nest new server");
     }
-    if (backend == "fastify") {
+    if (config.backend == "fastify") {
       await load(100, "Starting fastify project with fastify cli");
       await exec("npm install fastify-cli --global");
-        await sleep(15000);
+      await sleep(15000);
       await exec("fastify generate server");
     }
-    if (backend == "koa") {
+    if (config.backend == "koa") {
       await load(100, "Starting koa project with koa cli");
       await exec("npm i -g koa");
       await sleep(15000);
       await exec("koa new server");
     }
   }
-  if (frontend) {
-    if (frontend == "react") {
+  if (config.frontend) {
+    if (config.frontend == "react") {
       await load(100, "Starting react project with create-react-app...");
       await exec("npm install -g create-react-app");
-        await sleep(10000);
+      await sleep(10000);
       await exec(`create-react-app client`);
     }
-    if (frontend == "vue") {
+    if (config.frontend == "vue") {
       await load(100, "Starting vue project with vue-cli...");
       await exec("npm install -g vue-cli");
       await sleep(10000);
       await exec(`vue init webpack client`);
     }
-    if (frontend == "angular") {
+    if (config.frontend == "angular") {
       await load(100, "Starting angular project with ng new...");
       await exec("npm install -g @angular/cli");
       await sleep(15000);
       await exec(`ng new client`);
     }
-    if (frontend == "next") {
-        await load(100, "Creating next proyect...");
+    if (config.frontend == "next") {
+      await load(100, "Creating next proyect...");
       await exec(`npx create-next-app@latest`);
     }
-    if (frontend == "svelte") {
+    if (config.frontend == "svelte") {
       await load(100, "Starting svelte project with svelte init...");
-      await exec("npm install -g svelte");
-      await sleep(15000);
-      await exec(`svelte init client`);
+      await exec("npm install -g @svel/cli");
+      await sleep(30000);
+      await exec(`svelte create client`);
+    }
+  }
+  if (config.app) {
+    if (config.app == "react native") {
+      await load(100, "Starting react native project with expo-cli...");
+      await exec("npm install -g expo-cli");
+      await sleep(50000);
+      await exec(`expo init app`);
+    }
+    if (config.app == "ionic") {
+      await load(100, "Starting ionic project with ionic cli...");
+      await exec("npm install -g @ionic/cli");
+      await sleep(20000);
+      await exec(`ionic start app`);
+    }
+    if (config.app == "electron") {
+      await load(100, "Starting electron project with electron cli...");
+      await exec("npm install -g electron-cli");
+      await sleep(30000);
+      await exec(`electron-cli init app`);
     }
   }
 }
@@ -252,24 +266,28 @@ await welcome();
 await webTypeSelector();
 await load(500, "Loading...");
 console.clear();
-if (webType == "load-config") {
+if (config.webType == "load-config") {
   await getConfig();
 }
+if (config.webType == "app") {
+  await appSelector();
+  console.clear();
+}
 if (
-  webType == "fullstack" ||
-  (webType == "frotend" && webType != "loadConfig")
+  config.webType == "fullstack" ||
+  (config.webType == "frotend" && config.webType != "loadConfig")
 ) {
   await frontendSelector();
   console.clear();
 }
 if (
-  webType == "fullstack" ||
-  (webType == "backend" && webType != "loadConfig")
+  config.webType == "fullstack" ||
+  (config.webType == "backend" && config.webType != "loadConfig")
 ) {
   await backendSelector();
   console.clear();
 }
-if (webType != "loadConfig") {
+if (config.webType != "load-config") {
   await saveConfigPrompt();
 }
 console.clear();
