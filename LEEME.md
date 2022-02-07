@@ -1,32 +1,32 @@
 [![npm package](https://nodei.co/npm/@mrlol/web.cli.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/@mrlol/web.cli)
 # web.cli &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/MrlolDev/web.cli/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@mrlol/web.cli.svg?style=flat)](https://www.npmjs.com/package/@mrlol/web.cli)  [![npm downloads](https://img.shields.io/npm/dt/@mrlol/web.cli.svg?style=flat)](https://www.npmjs.com/package/@mrlol/web.cli)
-[Spanish Docs](https://github.com/MrlolDev/web.cli/blob/main/LEEME.md)
+[Documentación en Inglés](https://github.com/MrlolDev/web.cli/blob/main/README.md)
 
-A command line interface to init your web project with different frameworks.
+Un interfaz de comandos para iniciar su proyecto web con diferentes frameworks.
 
-# Installation
-### With NPM
+# Instalación
+### Con NPM
 ```
 $ npm i @mrlol/web.cli -g
 ```
-### With Yarn
+### Con Yarn
 ```
 $ yarn add @mrlol/web.cli -g
 ```
-# Usage
-## Init your project
-When you install **web.cli** you only need to run the command `web`. After that it will ask you some questions to create your project. It can take a few minutes to create your project.
+# Usar
+## Iniciar su proyecto
+Cuando instala **web.cli** solo necesita ejecutar el comando `web`. Después de eso le preguntará algunas preguntas para crear su proyecto. Puede tardar unos minutos en crear su proyecto.
 ```
 $ web
 ```
-## Get and delete configs
-You can get the configs you have saved. And you can also delete them.
+## Obtener y eliminar configuraciones
+Puede obtener las configuraciones que ha guardado. Y también puede eliminarlas.
 ```
 $ web-configs
 ```
 
-# Available frameworks
-If you want to suggest a new framework, please open an issue on [Github](https://github.com/MrlolDev/web.cli/issues). Or fork the [project repo](https://github.com/MrlolDev/web.cli) and create a pull request.
+# Frameworks disponibles
+Si quiere sugerir un nuevo framework, por favor abra una incidencia en [Github](https://github.com/MrlolDev/web.cli/issues). O clonar el [repo de proyecto](https://github.com/MrlolDev/web.cli) y crea una pull request.
 
 ## Frontend frameworks
 1. [React](https://reactjs.org/)
